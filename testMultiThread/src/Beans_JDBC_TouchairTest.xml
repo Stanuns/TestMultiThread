@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd ">
+
+   <!-- Initialization for data source -->
+   <bean id="dataSource" 
+      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+      <property name="url" value="jdbc:oracle:thin:@localhost:1521:ORCL"/>
+      <property name="username" value="testUser_JDBC"/>
+      <property name="password" value="testUser_JDBC123"/>
+   </bean>
+
+   <!-- Definition for studentJDBCTemplate bean -->
+   <bean id="PersonInfoJDBCTemplate" 
+      class="com.TouchAirDataTest1.PersonInfoJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <bean id="AnswersJDBCTemplate" 
+      class="com.TouchAirDataTest1.AnswersJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <bean id="PersonTargetJDBCTemplate" 
+      class="com.TouchAirDataTest1.PersonTargetJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   
+   <!-- 多线程配置 必须scope="prototype"-->  
+   <bean id="PersonTarget_MultiThJDBCTemplate" 
+      class="com.TouchAirDataTest1.MultiTest.PersonTarget_MultiThJDBCTemplate" scope="prototype">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+      
+    <!-- 配置线程池 -->  
+   <bean id ="taskExecutor"  class ="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" >  
+    <!-- 线程池维护线程的最少数量 -->  
+   <property name ="corePoolSize" value ="7" />  
+    <!-- 线程池维护线程所允许的空闲时间 -->  
+   <property name ="keepAliveSeconds" value ="30000" />  
+    <!-- 线程池维护线程的最大数量 -->  
+   <property name ="maxPoolSize" value ="1000" />  
+    <!-- 线程池所使用的缓冲队列 -->  
+   <property name ="queueCapacity" value ="200" />  
+   </bean>    
+      
+</beans>
